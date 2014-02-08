@@ -14,7 +14,7 @@
   Game.DIM_X = 500;
   Game.DIM_Y = 500;
   Game.FPS = 30;
-  Game.NUM_ASTEROIDS = 3;
+  Game.NUM_ASTEROIDS = 0;
   Game.A_COLORS = ["orange", "green", "blue", "black"]
 
   Game.populateAsteroids = function (game) {
@@ -63,12 +63,11 @@
   };
 
   Game.prototype.step = function () {
-    this.hasWon();
     this.move();
-    this.draw();
-	  this.isOutOfBounds();
-    //turn this on when actually running the game
+	this.isOutOfBounds();
     this.checkCollisions();
+    this.draw();
+    this.hasWon();
   };
 
   Game.prototype.start = function () {
@@ -80,8 +79,26 @@
     if (this.asteroids.length < 1) {
       this.level += 1;
       this.asteroids = Game.populateAsteroids(this);
+	  this.ship.pos = [Game.DIM_X/2, Game.DIM_Y/2];
+	  this.ship.vel = [0,0];
+	  this.showLevel();
     }
   };
+  
+  Game.prototype.showLevel = function () {
+	  console.log("Level: " + this.level);
+	  clearInterval(AsteroidsGame.intervalId);
+	  this.ctx.clearRect(0,0, Game.DIM_X, Game.DIM_Y);
+	  
+	  var game = this;
+	  setTimeout(function () {
+	  	AsteroidsGame.intervalId = setInterval(game.step.bind(game), Game.FPS);
+	  }, 2000);
+	 
+      ctx.fillStyle = "black";
+      ctx.font = 11 + "pt Arial";
+      ctx.fillText(("Level: " + this.level), (Game.DIM_X/2-27), (Game.DIM_Y/2));
+  }
 
   Game.prototype.checkCollisions = function() {
     var that = this;
