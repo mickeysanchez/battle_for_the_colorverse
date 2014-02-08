@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <style>
+  canvas {
+    border: 1px solid;
+    height: 500px;
+    width: 500px;
+  }
+
+  </style>
+
+
+  <canvas id="canvas"></canvas>
+
+  <script>
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    ctx.beginPath();
+    ctx.fillStyle = "red";
+
+    ctx.arc(50,50,20,0,2 * Math.PI,false);
+    ctx.fill();
+
+  </script>
+</body>
+</html>
