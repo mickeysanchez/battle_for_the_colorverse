@@ -14,7 +14,7 @@
   Game.DIM_X = 500; // Game width
   Game.DIM_Y = 500; // Game height
   Game.FPS = 30; // Game speed
-  Game.NUM_ASTEROIDS = 0; // This + game's level number determines number of asteroids.
+  Game.NUM_ASTEROIDS = 10; // This + game's level number determines number of asteroids.
   
   Game.A_COLORS = ["orange", "green", "blue", "black"] // Asteroid colors
 
