@@ -42,10 +42,6 @@
 
     var distance = Math.sqrt((xDistance*xDistance) + (yDistance*yDistance));
 
-    if (distance < (this.radius + otherObject.radius)) {
-      console.log("true");
-    };
-
     return (distance < (this.radius + otherObject.radius)) ? true : false;
   };
 

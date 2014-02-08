@@ -142,7 +142,7 @@
 
       var a2 = new AsteroidsGame.Asteroid([pos[0 ], pos[1]], randVel2, radius, color2);
 
-    	this.asteroids.push(a1);
+      this.asteroids.push(a1);
       this.asteroids.push(a2);
     }
   }

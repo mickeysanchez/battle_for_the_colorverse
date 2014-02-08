@@ -11,7 +11,6 @@
   Ship.inherits(AsteroidsGame.MovingObject);
 
   Ship.prototype.power = function (impulse) {
-    console.log(this.vel[0]);
     if (Math.abs(this.vel[0]) < 20 && Math.abs(this.vel[1]) < 20) {
       this.vel[0] += impulse[0];
       this.vel[1] += impulse[1];
@@ -63,10 +62,20 @@
   };
 
   Ship.prototype.drawVectorLine = function (ctx) {
+	var xVel = this.vel[0];
+	var yVel = this.vel[1];
+
+	var shipSpeed = Math.sqrt((xVel*xVel) + (yVel*yVel));
+	var multiplier = AsteroidsGame.Bullet.SPEED / shipSpeed;
+
+	var vel = [xVel * multiplier, yVel * multiplier];
+	
     ctx.beginPath();
     ctx.moveTo(this.pos[0], this.pos[1]);
-    ctx.lineTo(10, 10);
+    ctx.lineTo((this.pos[0] + vel[0]), (this.pos[1] + vel[1]));
     ctx.stroke();
+	
+	
   }
 
 })(this);
