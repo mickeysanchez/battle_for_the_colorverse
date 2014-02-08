@@ -11,11 +11,12 @@
 
   };
 
-  Game.DIM_X = 500;
-  Game.DIM_Y = 500;
-  Game.FPS = 30;
-  Game.NUM_ASTEROIDS = 0;
-  Game.A_COLORS = ["orange", "green", "blue", "black"]
+  Game.DIM_X = 500; // Game width
+  Game.DIM_Y = 500; // Game height
+  Game.FPS = 30; // Game speed
+  Game.NUM_ASTEROIDS = 0; // This + game's level number determines number of asteroids.
+  
+  Game.A_COLORS = ["orange", "green", "blue", "black"] // Asteroid colors
 
   Game.populateAsteroids = function (game) {
 	  var asteroids = [];
@@ -72,7 +73,7 @@
 
   Game.prototype.start = function () {
     this.bindKeyHandlers();
-    AsteroidsGame.intervalId = setInterval(this.step.bind(this), Game.FPS);
+    this.showLevel();
   };
 
   Game.prototype.hasWon = function () {
@@ -86,14 +87,13 @@
   };
   
   Game.prototype.showLevel = function () {
-	  console.log("Level: " + this.level);
 	  clearInterval(AsteroidsGame.intervalId);
 	  this.ctx.clearRect(0,0, Game.DIM_X, Game.DIM_Y);
 	  
 	  var game = this;
 	  setTimeout(function () {
 	  	AsteroidsGame.intervalId = setInterval(game.step.bind(game), Game.FPS);
-	  }, 2000);
+	  }, 1500);
 	 
       ctx.fillStyle = "black";
       ctx.font = 11 + "pt Arial";

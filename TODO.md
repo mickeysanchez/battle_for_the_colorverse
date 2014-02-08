@@ -1,2 +1,1 @@
-* Fix up down max speed.
-* change movement so you can turn.
+* change movement so you can "turn" and up key is always straight.
