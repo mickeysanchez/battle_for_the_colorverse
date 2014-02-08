@@ -11,12 +11,12 @@
   Asteroid.inherits(AsteroidsGame.MovingObject);
 
   Asteroid.randomAsteroid = function(dimX, dimY) {
-	// asteroids should spawn at random x & y greater than 350 and less than 150
+	
+	// asteroids never spawn on top of ship 
 	
 	var quadrants = [Math.random() * (dimX/3.5),
 					 (dimX - (Math.random() * (dimX/3.5)))];
 	
-	console.log(quadrants);
 	var x = quadrants[Math.floor(Math.random() * 2)];
     var y = quadrants[Math.floor(Math.random() * 2)];
 
