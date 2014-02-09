@@ -14,7 +14,7 @@
 // FACTORY METHOD FOR CREATING RANDOM ASTEROIDS
   
   Asteroid.randomAsteroid = function(dimX, dimY) {
-	// ASTEROIDS NEVER SPAWN IN THE CENTER
+	// asteroids never spawn on top of the ship
 	// currently this only supports a square canvas
 	var quadrants = [Math.random() * (dimX/3.5),
 					 (dimX - (Math.random() * (dimX/3.5)))];

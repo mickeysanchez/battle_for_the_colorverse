@@ -2,11 +2,15 @@
   var AsteroidsGame = root.AsteroidsGame = (root.AsteroidsGame || {});
 
   var Game = AsteroidsGame.Game = function Game(ctx) {
+  	var centerX = Game.DIM_X/2;
+  	var centerY = Game.DIM_Y/2;   
+	  
     this.ctx = ctx;
     this.level = 1;
     this.asteroids = Game.populateAsteroids(this);
-    this.ship = new AsteroidsGame.Ship();
-    this.bullets = [];
+    this.ship = new AsteroidsGame.Ship(Game.SHIP1_POS, 1);
+	this.ship2 = new AsteroidsGame.Ship(Game.SHIP2_POS, 2);
+    this.bullets = [[],[],[]];
     this.score = 0;
 
   };
@@ -16,9 +20,11 @@
   Game.DIM_X = 500; // Game width
   Game.DIM_Y = 500; // Game height
   Game.FPS = 30; 
-  Game.NUM_ASTEROIDS = 10; // This + game's level number determines number of asteroids.
+  Game.NUM_ASTEROIDS = 0; // This + game's level number determines number of asteroids.
   Game.MAX_BULLETS = 2;
   Game.A_COLORS = ["orange", "green", "blue", "black"]; // Asteroid colors
+  Game.SHIP1_POS = [50, 450];
+  Game.SHIP2_POS = [450, 50];
 
 // FACTORY METHODS //
   
@@ -35,22 +41,29 @@
   
   Game.prototype.bindKeyHandlers = function() {
     var that = this;
-    key("up", function () { that.ship.power([0,-1])});
-    key("down", function () { that.ship.power([0,1])});
-    key("left", function () { that.ship.power([-1,0])});
+    key("up", function ()    { that.ship.power([0,-1])});
+    key("down", function ()  { that.ship.power([0,1])});
+    key("left", function ()  { that.ship.power([-1,0])});
     key("right", function () { that.ship.power([1,0])});
 
-    key("space", function () { that.fireBullet() });
+    key("space", function () { that.fireBullet(that.ship) });
+	
+    key("w", function () { that.ship2.power([0,-1])});
+    key("s", function () { that.ship2.power([0,1])});
+    key("a", function () { that.ship2.power([-1,0])});
+    key("d", function () { that.ship2.power([1,0])});
+
+    key("c", function () { that.fireBullet(that.ship2) });
   };
   
 // MAIN GAME FLOW FUNCTIONS // 
   
   Game.prototype.start = function () {
   	this.bindKeyHandlers();
-    this.showLevel();
+	AsteroidsGame.intervalId = setInterval(this.step.bind(this), Game.FPS);
   };
   
-  Game.prototype.showLevel = function () {
+  Game.prototype.showWinner = function () {
 	  clearInterval(AsteroidsGame.intervalId);
 	  this.ctx.clearRect(0,0, Game.DIM_X, Game.DIM_Y);
 	  
@@ -69,7 +82,7 @@
 	this.isOutOfBounds();
     this.checkCollisions();
     this.draw();
-    this.hasWon();
+    // this.hasWon();
   };
   
   Game.prototype.move = function () {
@@ -78,8 +91,13 @@
     });
 
     this.ship.move();
+	this.ship2.move();
 
-    this.bullets.forEach(function(bullet) {
+    this.bullets[1].forEach(function(bullet) {
+      bullet.move();
+    });
+	
+    this.bullets[2].forEach(function(bullet) {
       bullet.move();
     });
   };
@@ -92,28 +110,28 @@
       asteroid.draw(that.ctx);
     });
 
-    this.drawScore(that.ctx);
-
     this.ship.draw(that.ctx);
+	this.ship2.draw(that.ctx)
 
-    this.bullets.forEach(function(bullet) {
+    this.bullets[1].forEach(function(bullet) {
       bullet.draw(that.ctx);
     });
 
-  };
-  
-  Game.prototype.drawScore = function (ctx) {
-    ctx.fillStyle = "black";
-    ctx.font = 10 + "pt Arial";
-    ctx.fillText(("score: " + this.score), (Game.DIM_X/2-25), 15);
+    this.bullets[2].forEach(function(bullet) {
+      bullet.draw(that.ctx);
+    });
   };
   
   Game.prototype.reset = function () {
     this.level = 1;
     this.asteroids = Game.populateAsteroids(this);
-    this.ship.pos = [Game.DIM_X/2, Game.DIM_Y/2];
+    this.ship.pos = [Game.SHIP1_POS[0], Game.SHIP1_POS[1]];
+	this.ship2.pos = [Game.SHIP2_POS[0], Game.SHIP2_POS[1]];
+	this.ship.isDestroyed = false;
+	this.ship2.isDestroyed = false;
     this.ship.vel = [0,0];
-    this.bullets = [];
+	this.ship2.vel = [0,0];
+    this.bullets = [[],[],[]];
     this.score = 0;
   };
 
@@ -124,38 +142,40 @@
 // HELPER FUNCTIONS // 
 
   Game.prototype.hasWon = function () {
-    if (this.asteroids.length < 1) {
-      this.level += 1;
-      this.asteroids = Game.populateAsteroids(this);
-	  this.ship.pos = [Game.DIM_X/2, Game.DIM_Y/2];
-	  this.ship.vel = [0,0];
-	  this.showLevel();
-    }
+	  if (this.ship.isDestroyed) {
+		  return true;
+	  } else if (this.ship2.isDestroyed) {
+		  return true;
+	  } else {
+		  return false;
+	  }
   };
   
   Game.prototype.checkCollisions = function() {
     var that = this;
     this.asteroids.forEach(function(asteroid) {
        if (that.ship.isCollidedWith(asteroid)) {
-         that.reset();
+         that.ship.isDestroyed = true;
+       } else if (that.ship2.isCollidedWith(asteroid)) {
+	     that.ship2.isDestroyed = true;
        }
     })
   };
 
-  Game.prototype.fireBullet = function() {
-	if (this.bullets.length < Game.MAX_BULLETS) {
-      var bullet = this.ship.fireBullet();
+  Game.prototype.fireBullet = function(ship) {
+	if (this.bullets[ship.id].length < Game.MAX_BULLETS) {
+      var bullet = ship.fireBullet();
     };
 	
     if (bullet) {
-      this.bullets.push(bullet)
+      this.bullets[ship.id].push(bullet)
     };
   };
 
   Game.prototype.removeAsteroid = function (asteroid) {
     var index = this.asteroids.indexOf(asteroid);
 
-	  var halfRadius = asteroid.radius/2;
+	var halfRadius = asteroid.radius/2;
     this.splitAsteroid(asteroid.pos, halfRadius);
 
     this.score += 1;
@@ -164,7 +184,6 @@
   };
 
   Game.prototype.splitAsteroid = function (pos, radius) {
-    
 	if (radius+1 > AsteroidsGame.Asteroid.RADIUS/4) {
       var randColorNum = Math.floor(Math.random() * 4);
       var randColorNum2 = Math.floor(Math.random() * 4);
@@ -188,8 +207,8 @@
   };
 
   Game.prototype.removeBullet = function (bullet) {
-    var index = this.bullets.indexOf(bullet);
-    this.bullets.splice(index, 1);
+    var index = this.bullets[bullet.shipId].indexOf(bullet);
+    this.bullets[bullet.shipId].splice(index, 1);
   };
 
   Game.prototype.isOutOfBounds = function () {
@@ -207,6 +226,13 @@
 
 	if (x > Game.DIM_X || x < 0 || y > Game.DIM_Y || y < 0) {
 		  this.ship.pos = [Game.DIM_X - x, Game.DIM_Y - y];
+	};
+	
+	var x = this.ship2.pos[0];
+	var y = this.ship2.pos[1];
+
+	if (x > Game.DIM_X || x < 0 || y > Game.DIM_Y || y < 0) {
+		  this.ship2.pos = [Game.DIM_X - x, Game.DIM_Y - y];
 	};
   };
 

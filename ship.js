@@ -3,11 +3,10 @@
   var MovingObject = AsteroidsGame.MovingObject;
   var Game = AsteroidsGame.Game;
   
-  var Ship = AsteroidsGame.Ship = function Ship() {
-	var centerX = Game.DIM_X/2;
-	var centerY = Game.DIM_Y/2;  
-	  
-    MovingObject.call(this, [centerX, centerY], [0,0], Ship.RADIUS, Ship.COLOR);
+  var Ship = AsteroidsGame.Ship = function Ship(pos, id) {
+	this.id = 1;
+    this.isDestroyed = false;
+    MovingObject.call(this, pos, [0,0], Ship.RADIUS, Ship.COLOR);
   };
   
   Ship.inherits(MovingObject);
@@ -79,7 +78,7 @@
       var vel = [xVel * multiplier, yVel * multiplier];
       var pos = [this.pos[0], this.pos[1]];
 
-      return new AsteroidsGame.Bullet(pos, vel, AsteroidsGame.currentGame);
+      return new AsteroidsGame.Bullet(pos, vel, AsteroidsGame.currentGame, this.id);
     }
   }
 
