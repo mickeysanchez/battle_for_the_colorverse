@@ -148,6 +148,20 @@
 
   Game.prototype.proclaimWinner = function () {
 	  this.stop();
+	  
+	  var winningColor;
+	  
+	  if (this.ship.isDestroyed) {
+		  winningColor = this.ship2.color;
+	  } else if (this.ship2.isDestroyed) {
+		  winningColor = this.ship.color;
+	  };
+	  
+	  ctx = this.ctx;
+      ctx.fillStyle = winningColor;
+      ctx.font = 15 + "pt Arial";
+      ctx.fillText((winningColor + " wins"), (Game.DIM_X/2-40), Game.DIM_Y/2);
+	  
 	  setTimeout(this.reset.bind(this), 2000);
   }
 
