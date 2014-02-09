@@ -17,6 +17,7 @@
   Game.DIM_Y = 500; // Game height
   Game.FPS = 30; 
   Game.NUM_ASTEROIDS = 10; // This + game's level number determines number of asteroids.
+  Game.MAX_BULLETS = 2;
   Game.A_COLORS = ["orange", "green", "blue", "black"]; // Asteroid colors
 
 // FACTORY METHODS //
@@ -142,8 +143,10 @@
   };
 
   Game.prototype.fireBullet = function() {
-    var bullet = this.ship.fireBullet();
-
+	if (this.bullets.length < Game.MAX_BULLETS) {
+      var bullet = this.ship.fireBullet();
+    };
+	
     if (bullet) {
       this.bullets.push(bullet)
     };
