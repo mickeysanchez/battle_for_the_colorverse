@@ -8,8 +8,8 @@
     this.ctx = ctx;
     this.level = 1;
     this.asteroids = Game.populateAsteroids(this);
-    this.ship = new AsteroidsGame.Ship(Game.SHIP1_POS, 1);
-	this.ship2 = new AsteroidsGame.Ship(Game.SHIP2_POS, 2);
+    this.ship = new AsteroidsGame.Ship(Game.SHIP1_POS, 1, "red");
+	this.ship2 = new AsteroidsGame.Ship(Game.SHIP2_POS, 2, "blue");
     this.bullets = [[],[],[]];
     this.score = 0;
 
@@ -22,7 +22,7 @@
   Game.FPS = 30; 
   Game.NUM_ASTEROIDS = 0; // This + game's level number determines number of asteroids.
   Game.MAX_BULLETS = 2;
-  Game.A_COLORS = ["orange", "green", "blue", "black"]; // Asteroid colors
+  Game.A_COLORS = ["orange", "green", "#DAA520", "black"]; // Asteroid colors
   Game.SHIP1_POS = [50, 450];
   Game.SHIP2_POS = [450, 50];
 
@@ -82,7 +82,9 @@
 	this.isOutOfBounds();
     this.checkCollisions();
     this.draw();
-    // this.hasWon();
+    if (this.hasWon()) {
+    	this.proclaimWinner();
+    }
   };
   
   Game.prototype.move = function () {
@@ -123,6 +125,7 @@
   };
   
   Game.prototype.reset = function () {
+	this.ctx.clearRect(0,0, Game.DIM_X, Game.DIM_Y);
     this.level = 1;
     this.asteroids = Game.populateAsteroids(this);
     this.ship.pos = [Game.SHIP1_POS[0], Game.SHIP1_POS[1]];
@@ -133,13 +136,20 @@
 	this.ship2.vel = [0,0];
     this.bullets = [[],[],[]];
     this.score = 0;
+	AsteroidsGame.intervalId = setInterval(this.step.bind(this), Game.FPS);
+	
   };
 
   Game.prototype.stop = function() {
-    clearInterval(this.AsteroidsGame.intervalId);
+    clearInterval(AsteroidsGame.intervalId);
   };
 
 // HELPER FUNCTIONS // 
+
+  Game.prototype.proclaimWinner = function () {
+	  this.stop();
+	  setTimeout(this.reset.bind(this), 2000);
+  }
 
   Game.prototype.hasWon = function () {
 	  if (this.ship.isDestroyed) {

@@ -47,8 +47,7 @@
   Bullet.prototype.outOfBounds = function () {
 	if (Math.abs(this.pos[0]) > AsteroidsGame.Game.DIM_X || Math.abs(this.pos[1]) > AsteroidsGame.Game.DIM_Y || this.pos[0] < 0 || this.pos[1] < 0) {
 			
-	  	var index = this.game.bullets.indexOf(this);
-	  	this.game.bullets = this.game.bullets.slice(index+1);
+	  	this.game.removeBullet(this);
 	}
   };
 

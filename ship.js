@@ -3,16 +3,15 @@
   var MovingObject = AsteroidsGame.MovingObject;
   var Game = AsteroidsGame.Game;
   
-  var Ship = AsteroidsGame.Ship = function Ship(pos, id) {
-	this.id = 1;
+  var Ship = AsteroidsGame.Ship = function Ship(pos, id, color) {
+	this.id = id;
     this.isDestroyed = false;
-    MovingObject.call(this, pos, [0,0], Ship.RADIUS, Ship.COLOR);
+    MovingObject.call(this, pos, [0,0], Ship.RADIUS, color);
   };
   
   Ship.inherits(MovingObject);
 
   Ship.RADIUS = 10;
-  Ship.COLOR = "red";
   Ship.MAX_SPEED = 20;
   
 // DRAW THE SHIP //
