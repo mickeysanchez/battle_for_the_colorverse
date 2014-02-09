@@ -7,6 +7,13 @@
     this.radius = radius;
     this.color  = color;
   };
+  
+  MovingObject.randomVec = function () {
+    var x = (Math.random() * 1) - (Math.random() * 1);
+    var y = (Math.random() * 1) - (Math.random() * 1);
+    var vel = [x, y];
+    return vel;
+  };
 
   MovingObject.prototype.move = function () {
     this.pos[0] += this.vel[0];

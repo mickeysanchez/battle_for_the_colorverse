@@ -10,14 +10,17 @@
     this.score = 0;
 
   };
+  
+// GAME CONSTANTS //
 
   Game.DIM_X = 500; // Game width
   Game.DIM_Y = 500; // Game height
-  Game.FPS = 30; // Game speed
+  Game.FPS = 30; 
   Game.NUM_ASTEROIDS = 10; // This + game's level number determines number of asteroids.
-  
-  Game.A_COLORS = ["orange", "green", "blue", "black"] // Asteroid colors
+  Game.A_COLORS = ["orange", "green", "blue", "black"]; // Asteroid colors
 
+// FACTORY METHODS //
+  
   Game.populateAsteroids = function (game) {
 	  var asteroids = [];
 	  for (var i = 0; i < (Game.NUM_ASTEROIDS + game.level); i++) {
@@ -25,6 +28,59 @@
 	  };
 
 	  return asteroids;
+  };
+  
+// KEY HANDLERS //
+  
+  Game.prototype.bindKeyHandlers = function() {
+    var that = this;
+    key("up", function () { that.ship.power([0,-1])});
+    key("down", function () { that.ship.power([0,1])});
+    key("left", function () { that.ship.power([-1,0])});
+    key("right", function () { that.ship.power([1,0])});
+
+    key("space", function () { that.fireBullet() });
+  };
+  
+// MAIN GAME FLOW FUNCTIONS // 
+  
+  Game.prototype.start = function () {
+  	this.bindKeyHandlers();
+    this.showLevel();
+  };
+  
+  Game.prototype.showLevel = function () {
+	  clearInterval(AsteroidsGame.intervalId);
+	  this.ctx.clearRect(0,0, Game.DIM_X, Game.DIM_Y);
+	  
+	  var game = this;
+	  setTimeout(function () {
+	  	AsteroidsGame.intervalId = setInterval(game.step.bind(game), Game.FPS);
+	  }, 1500);
+	 
+      ctx.fillStyle = "black";
+      ctx.font = 11 + "pt Arial";
+      ctx.fillText(("Level: " + this.level), (Game.DIM_X/2-27), (Game.DIM_Y/2));
+  };
+  
+  Game.prototype.step = function () {
+    this.move();
+	this.isOutOfBounds();
+    this.checkCollisions();
+    this.draw();
+    this.hasWon();
+  };
+  
+  Game.prototype.move = function () {
+    this.asteroids.forEach(function(asteroid) {
+      asteroid.move();
+    });
+
+    this.ship.move();
+
+    this.bullets.forEach(function(bullet) {
+      bullet.move();
+    });
   };
 
   Game.prototype.draw = function () {
@@ -44,37 +100,27 @@
     });
 
   };
-
+  
   Game.prototype.drawScore = function (ctx) {
     ctx.fillStyle = "black";
     ctx.font = 10 + "pt Arial";
     ctx.fillText(("score: " + this.score), (Game.DIM_X/2-25), 15);
   };
-
-  Game.prototype.move = function () {
-    this.asteroids.forEach(function(asteroid) {
-      asteroid.move();
-    });
-
-    this.ship.move();
-
-    this.bullets.forEach(function(bullet) {
-      bullet.move();
-    });
+  
+  Game.prototype.reset = function () {
+    this.level = 1;
+    this.asteroids = Game.populateAsteroids(this);
+    this.ship.pos = [Game.DIM_X/2, Game.DIM_Y/2];
+    this.ship.vel = [0,0];
+    this.bullets = [];
+    this.score = 0;
   };
 
-  Game.prototype.step = function () {
-    this.move();
-	this.isOutOfBounds();
-    this.checkCollisions();
-    this.draw();
-    this.hasWon();
+  Game.prototype.stop = function() {
+    clearInterval(this.AsteroidsGame.intervalId);
   };
 
-  Game.prototype.start = function () {
-    this.bindKeyHandlers();
-    this.showLevel();
-  };
+// HELPER FUNCTIONS // 
 
   Game.prototype.hasWon = function () {
     if (this.asteroids.length < 1) {
@@ -86,20 +132,6 @@
     }
   };
   
-  Game.prototype.showLevel = function () {
-	  clearInterval(AsteroidsGame.intervalId);
-	  this.ctx.clearRect(0,0, Game.DIM_X, Game.DIM_Y);
-	  
-	  var game = this;
-	  setTimeout(function () {
-	  	AsteroidsGame.intervalId = setInterval(game.step.bind(game), Game.FPS);
-	  }, 1500);
-	 
-      ctx.fillStyle = "black";
-      ctx.font = 11 + "pt Arial";
-      ctx.fillText(("Level: " + this.level), (Game.DIM_X/2-27), (Game.DIM_Y/2));
-  }
-
   Game.prototype.checkCollisions = function() {
     var that = this;
     this.asteroids.forEach(function(asteroid) {
@@ -107,20 +139,7 @@
          that.reset();
        }
     })
-  }
-
-  Game.prototype.reset = function () {
-    this.level = 1;
-    this.asteroids = Game.populateAsteroids(this);
-    this.ship.pos = [Game.DIM_X/2, Game.DIM_Y/2];
-    this.ship.vel = [0,0];
-    this.bullets = [];
-    this.score = 0;
-  }
-
-  Game.prototype.stop = function() {
-    clearInterval(this.AsteroidsGame.intervalId);
-  }
+  };
 
   Game.prototype.fireBullet = function() {
     var bullet = this.ship.fireBullet();
@@ -128,7 +147,7 @@
     if (bullet) {
       this.bullets.push(bullet)
     };
-  }
+  };
 
   Game.prototype.removeAsteroid = function (asteroid) {
     var index = this.asteroids.indexOf(asteroid);
@@ -142,8 +161,8 @@
   };
 
   Game.prototype.splitAsteroid = function (pos, radius) {
-
-    if (radius+1 > AsteroidsGame.Asteroid.RADIUS/4) {
+    
+	if (radius+1 > AsteroidsGame.Asteroid.RADIUS/4) {
       var randColorNum = Math.floor(Math.random() * 4);
       var randColorNum2 = Math.floor(Math.random() * 4);
       var color1 = Game.A_COLORS[randColorNum];
@@ -162,40 +181,30 @@
       this.asteroids.push(a1);
       this.asteroids.push(a2);
     }
-  }
+	
+  };
 
   Game.prototype.removeBullet = function (bullet) {
     var index = this.bullets.indexOf(bullet);
     this.bullets.splice(index, 1);
   };
 
-  Game.prototype.bindKeyHandlers = function() {
-    var that = this;
-    key("up", function () { that.ship.power([0,-1])});
-    key("down", function () { that.ship.power([0,1])});
-    key("left", function () { that.ship.power([-1,0])});
-    key("right", function () { that.ship.power([1,0])});
-
-    key("space", function () { that.fireBullet() });
-  }
-
   Game.prototype.isOutOfBounds = function () {
-
-	  this.asteroids.forEach(function(asteroid) {
+	this.asteroids.forEach(function(asteroid) {
 		  var x = asteroid.pos[0];
 		  var y = asteroid.pos[1];
 
 		  if (x > Game.DIM_X || x < 0 || y > Game.DIM_Y || y < 0) {
 			  asteroid.pos = [Game.DIM_X - x, Game.DIM_Y - y];
 		  };
-	  });
+	});
 
-	  var x = this.ship.pos[0];
-	  var y = this.ship.pos[1];
+	var x = this.ship.pos[0];
+	var y = this.ship.pos[1];
 
-	  if (x > Game.DIM_X || x < 0 || y > Game.DIM_Y || y < 0) {
+	if (x > Game.DIM_X || x < 0 || y > Game.DIM_Y || y < 0) {
 		  this.ship.pos = [Game.DIM_X - x, Game.DIM_Y - y];
-	  };
+	};
   };
 
 })(this);
