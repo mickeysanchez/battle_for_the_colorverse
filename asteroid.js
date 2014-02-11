@@ -14,13 +14,9 @@
 // FACTORY METHOD FOR CREATING RANDOM ASTEROIDS
   
   Asteroid.randomAsteroid = function(dimX, dimY) {
-	// asteroids never spawn on top of the ship
-	// currently this only supports a square canvas
-	var quadrants = [Math.random() * (dimX/3.5),
-					 (dimX - (Math.random() * (dimX/3.5)))];
-	
-	var x = quadrants[Math.floor(Math.random() * 2)];
-    var y = quadrants[Math.floor(Math.random() * 2)];
+	// For multiplayer, asteroids will spawn between players
+	var x = dimX/2;
+    var y = dimY/2;
 
     var pos = [x, y];
 

@@ -8,8 +8,8 @@
     this.ctx = ctx;
     this.level = 1;
     this.asteroids = Game.populateAsteroids(this);
-    this.ship = new AsteroidsGame.Ship(Game.SHIP1_POS, 1, "red");
-	this.ship2 = new AsteroidsGame.Ship(Game.SHIP2_POS, 2, "blue");
+    this.ship = new AsteroidsGame.Ship([Game.SHIP1_POS[0], Game.SHIP1_POS[1]], 1, "red");
+	this.ship2 = new AsteroidsGame.Ship([Game.SHIP2_POS[0], Game.SHIP2_POS[1]], 2, "blue");
     this.bullets = [[],[],[]];
     this.score = 0;
 
@@ -20,7 +20,7 @@
   Game.DIM_X = 500; // Game width
   Game.DIM_Y = 500; // Game height
   Game.FPS = 30; 
-  Game.NUM_ASTEROIDS = 0; // This + game's level number determines number of asteroids.
+  Game.NUM_ASTEROIDS = 4; // This + game's level number determines number of asteroids.
   Game.MAX_BULLETS = 2;
   Game.A_COLORS = ["orange", "green", "#DAA520", "black"]; // Asteroid colors
   Game.SHIP1_POS = [50, 450];
@@ -53,7 +53,7 @@
     key("a", function () { that.ship2.power([-1,0])});
     key("d", function () { that.ship2.power([1,0])});
 
-    key("c", function () { that.fireBullet(that.ship2) });
+    key("1", function () { that.fireBullet(that.ship2) });
   };
   
 // MAIN GAME FLOW FUNCTIONS // 
@@ -135,7 +135,6 @@
     this.ship.vel = [0,0];
 	this.ship2.vel = [0,0];
     this.bullets = [[],[],[]];
-    this.score = 0;
 	AsteroidsGame.intervalId = setInterval(this.step.bind(this), Game.FPS);
 	
   };
