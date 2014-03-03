@@ -23,6 +23,12 @@
 	      margin-left: auto;
 	      margin-right: auto;
 	    }
+		
+		p {
+			font-family: sans-serif;
+			width: 500px;
+			margin: auto;
+		}
 	  </style>
 
 	  <canvas width="500" height="500" id="canvas"></canvas>
@@ -34,6 +40,10 @@
 	    AsteroidsGame.currentGame = new AsteroidsGame.Game(ctx)
 	    AsteroidsGame.currentGame.start();
 	  </script>
+	  
+	  <p>Player 1: Arrow Keys + Spacebar to shoot.</p>
+	  <p>Player 2: WASD + 1 to shoot.</p>
+	  <p>Click <a href="http://www.mickeysanchez.com/asteroids">here</a> for single player.</p>
 	</body>
 
 </html>
