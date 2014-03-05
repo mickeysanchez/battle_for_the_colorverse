@@ -13,8 +13,9 @@ Controls: Arrow Keys + Spacebar to shoot.
 ##Technical Stuff
 
 * HTML5 canvas game written with object-oriented JavaScript
-* AI controller computer opponent that avoids obstacles
+* AI controlled computer opponent that avoids obstacles
 * Gamepad enabled on Google Chrome
 * Recursively drawn circles!
 * Single Player: [here](http://www.mickeysanchez.com/asteroids)
 * Versus Mode: [here](http://www.mickeysanchez.com/asteroids-multiplayer)
+* Pixel art by yours truly.
