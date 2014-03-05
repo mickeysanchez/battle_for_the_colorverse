@@ -1,1 +1,2 @@
-* fix stuff getting stuck in the sides
+##Bugs
+* Players and asteroids sometimes get stuck in the sides.
