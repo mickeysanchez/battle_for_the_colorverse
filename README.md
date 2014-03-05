@@ -1,6 +1,6 @@
 # Battle For The Colorverse
 
-####Welcome to the Colorverse. | [live](http://www.mickeysanchez.com/colorverse)
+####Welcome to the Colorverse. [Play Here](http://www.mickeysanchez.com/colorverse)
 
 The Blues have been mining color-rich asteroids in this sector for years. But on stardate zero-zero-five-two they encountered an unknown enemy for the first time... the Reds.
 
