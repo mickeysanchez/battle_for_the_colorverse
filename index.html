@@ -1,59 +1,66 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-	  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>	
-		
-	  <script src="lib/utils.js"></script>
-	  <script src="lib/moving_object.js"></script>
-	  <script src="lib/asteroid.js"></script>
-	  <script src="lib/game.js"></script>
-	  <script src="lib/ship.js"></script>
-	  <script src="lib/computer_ship.js"></script>
-	  <script src="lib/bullet.js"></script>
-	</head>
+<head>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>	
+	
+  <script src="lib/utils.js"></script>
+  <script src="lib/moving_object.js"></script>
+  <script src="lib/asteroid.js"></script>
+  <script src="lib/game.js"></script>
+  <script src="lib/ship.js"></script>
+  <script src="lib/computer_ship.js"></script>
+  <script src="lib/bullet.js"></script>
+</head>
 
-	<body>
-	  <style>
-	    canvas {
-	      border: 3px solid;
-	      height: 500px;
-	      width: 500px;
+<body>
+	<style>
+		canvas {
+		  border: 3px solid;
+		  height: 500px;
+		  width: 500px;
 		  background: #393945;
-	      display: block;
-	      margin: 40px auto;
-	    }
-		
-		body {
-			background: lightblue;
-			font-family: "Helvetica", sans-serif;
-			text-align: justify;
-			width: 500px;
-			margin: auto;
+		  display: block;
+		  margin: 40px auto;
 		}
-	  </style>
 
-	  <canvas width="500" height="500" id="canvas"></canvas>
+		body {
+		  background: lightblue;
+		  font-family: "Helvetica", sans-serif;
+		  text-align: justify;
+		  width: 500px;
+		  margin: auto;
+		}
+	</style>
 
-	  <script>
-	    var canvas = document.getElementById('canvas');
-	    var ctx = canvas.getContext('2d');
+	<canvas width="500" height="500" id="canvas"></canvas>
 
-	    AsteroidsGame.currentGame = new AsteroidsGame.Game(ctx)
-	    AsteroidsGame.currentGame.start();
-	  </script>
-	  
-	  <p><strong>Welcome to the Colorverse.</strong></p>
-	  <p>
+	<script>
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+
+		AsteroidsGame.currentGame = new AsteroidsGame.Game(ctx)
+		AsteroidsGame.currentGame.start();
+	</script>
+
+	<p>
+		<strong>Welcome to the Colorverse.</strong>
+	</p>
+	
+	<p>
 		 The Blues have been mining color-rich asteroids 
-	  	 in this sector for years. But on stardate zero-zero-five-two
-	     they encountered an unknown enemy for the first time... the Reds. </p>
-	  
-	  <p>Controls: Arrow Keys + Spacebar to shoot.</p>
-	  
-	  <p>(Bonus: This game supports gamepads on Google Chrome. Just 
-		  plug in and play!)</p>
-	</body>
+		 in this sector for years. But on stardate zero-zero-five-two
+		 they encountered an unknown enemy for the first time... the Reds. 
+	</p>
 
+	<p>
+		 Controls: Arrow Keys + Spacebar to shoot.
+	</p>
 
+	<p>
+		 (Bonus: This game supports gamepads on Google Chrome. Just 
+		  plug in and play!)
+	</p>
+
+</body>
 </html>
